@@ -1,0 +1,20 @@
+{
+  "name": "deliberaide",
+  "description": "Drive the deliberAIde platform from Claude. Wraps the deliberaide-cli Python package so Claude can authenticate via browser OAuth, list organisations, projects, and discussions, fetch transcripts and analysed artifacts, and orchestrate deliberative-democracy workflows end-to-end.",
+  "version": "0.1.0",
+  "author": {
+    "name": "deliberAIde",
+    "email": "hello@deliberaide.com"
+  },
+  "homepage": "https://deliberaide.com",
+  "repository": "https://github.com/deliberAIde/deliberaide-plugin",
+  "license": "Proprietary",
+  "keywords": [
+    "deliberation",
+    "deliberative-democracy",
+    "civic-tech",
+    "discussions",
+    "transcript-analysis",
+    "cli"
+  ]
+}

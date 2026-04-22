@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "deliberaide",
+  "description": "Marketplace for deliberAIde — structured deliberation and discussion analysis platform",
+  "owner": {
+    "name": "deliberAIde",
+    "email": "hello@deliberaide.com"
+  },
+  "plugins": [
+    {
+      "name": "deliberaide",
+      "description": "Drive the deliberAIde platform from Claude. Installs and wraps the deliberaide-cli PyPI package so agents can authenticate, browse organisations, projects, discussions, and artifacts, and fetch transcript analysis.",
+      "category": "productivity",
+      "source": "./plugins/deliberaide",
+      "author": {
+        "name": "deliberAIde",
+        "email": "hello@deliberaide.com"
+      },
+      "homepage": "https://deliberaide.com",
+      "keywords": [
+        "deliberation",
+        "deliberative-democracy",
+        "civic-tech",
+        "discussions",
+        "analysis",
+        "cli"
+      ]
+    }
+  ]
+}
