@@ -4,7 +4,7 @@
   "description": "Marketplace for deliberAIde — structured deliberation and discussion analysis platform",
   "owner": {
     "name": "deliberAIde",
-    "email": "hello@deliberaide.com"
+    "email": "info@deliberaide.com"
   },
   "plugins": [
     {
@@ -14,7 +14,7 @@
       "source": "./plugins/deliberaide",
       "author": {
         "name": "deliberAIde",
-        "email": "hello@deliberaide.com"
+        "email": "info@deliberaide.com"
       },
       "homepage": "https://deliberaide.com",
       "keywords": [
