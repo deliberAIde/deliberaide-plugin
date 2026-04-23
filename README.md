@@ -35,7 +35,7 @@ Or just say: *"install the deliberAIde CLI and summarise today's discussions"* a
 
 ## Requirements
 
-- Python 3.11+ on the machine Claude runs commands on
+- Python 3.10+ on the machine Claude runs commands on (or `uv` / `pipx` will auto-install a compatible Python)
 - `pip` reachable on PATH
 - A deliberAIde account at [platform.deliberaide.com](https://platform.deliberaide.com)
 
