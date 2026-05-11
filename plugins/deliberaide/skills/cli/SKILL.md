@@ -33,6 +33,26 @@ The package is published on PyPI as `deliberaide-cli`. Verify with `deliberaide-
 
 The CLI's default base URL is `https://platform.deliberaide.com`, the production API. You do not need to configure it for normal use. For local development, set `DELIBERAIDE_API_URL=http://127.0.0.1:8000` in the shell.
 
+## Network access in Codex
+
+Commands that install the CLI or contact the deliberAIde API need network access.
+
+In Codex, a network-restricted shell may expose proxy variables such as `HTTP_PROXY`, `HTTPS_PROXY`, or `ALL_PROXY` pointing to `http://127.0.0.1:9`. If a `deliberaide-cli` command fails with a refused connection to `127.0.0.1:9`, do not change the saved profile, do not clear the user's cookies, and do not assume the CLI is pointed at a local API. Treat it as Codex sandbox/network blocking and request permission to rerun the command with network access.
+
+Useful diagnostic commands:
+
+```bash
+deliberaide-cli profile show
+```
+
+On Windows PowerShell:
+
+```powershell
+"HTTP_PROXY=$env:HTTP_PROXY"
+"HTTPS_PROXY=$env:HTTPS_PROXY"
+"ALL_PROXY=$env:ALL_PROXY"
+```
+
 ## Authentication
 
 **Only use `deliberaide-cli auth login`**. It is the orchestrator that handles browser approval and token persistence atomically.
@@ -74,10 +94,10 @@ Use `context set <key> <value>`, `context show`, `context clear`, `context undo`
 
 ## JSON output
 
-Append `--json` to any command for machine-readable output envelopes:
+Use the global `--json` option before the command group for machine-readable output envelopes:
 
 ```bash
-deliberaide-cli projects list-projects --json
+deliberaide-cli --json projects list-projects
 ```
 
 Prefer `--json` when you will parse the output yourself.
@@ -89,22 +109,22 @@ Prefer `--json` when you will parse the output yourself.
 deliberaide-cli auth login --no-open-browser
 
 # 2. Identify the user + org
-deliberaide-cli users get-current-user-info --json
+deliberaide-cli --json users get-current-user-info
 
 # 3. Pick an org + project; pin them
-deliberaide-cli organisations list-organisations --json
+deliberaide-cli --json organisations list-organisations
 deliberaide-cli context set org_id <uuid>
-deliberaide-cli projects list-projects --json
+deliberaide-cli --json projects list-projects
 deliberaide-cli context set project_id <uuid>
 
 # 4. Browse discussions
-deliberaide-cli discussions list-discussions --json
+deliberaide-cli --json discussions list-discussions
 
 # 5. Fetch an artifact (transcript analysis, argument map, theme extraction, etc.)
-deliberaide-cli artifacts get-artifact --artifact-id <uuid> --json
-deliberaide-cli artifacts get-artifact-discussion --artifact-id <uuid> --json
-deliberaide-cli artifacts list-artifact-discussion-contributions --artifact-id <uuid> --json
-deliberaide-cli artifacts get-artifact-discussion-insights --artifact-id <uuid> --json
+deliberaide-cli --json artifacts get-artifact --artifact-id <uuid>
+deliberaide-cli --json artifacts get-artifact-discussion --artifact-id <uuid>
+deliberaide-cli --json artifacts list-artifact-discussion-contributions --artifact-id <uuid>
+deliberaide-cli --json artifacts get-artifact-discussion-insights --artifact-id <uuid>
 ```
 
 ## Discovering the command surface
@@ -137,6 +157,8 @@ deliberaide-cli artifacts get-artifact --help
 ## Handling auth failures
 
 If any command returns `Authentication required` or HTTP 401, the session has expired or was never established. Re-run `deliberaide-cli auth login --no-open-browser` and continue.
+
+If any command returns a refused connection to `127.0.0.1:9`, that is not an auth failure. It means the command was run without network access in Codex. Request network permission and rerun the same command.
 
 ## What NOT to do
 
