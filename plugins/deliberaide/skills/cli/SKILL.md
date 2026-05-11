@@ -1,10 +1,10 @@
 ---
-description: Install and drive the deliberaide-cli to operate the deliberAIde platform. Use whenever the user mentions deliberAIde, wants to work with deliberation discussions, projects, events, sessions, artifacts, or transcript analysis, or asks to "install the deliberAIde CLI". Handles authentication via browser OAuth, lists organisations / projects / discussions, fetches transcripts and analysed artifacts, and manages stateful context defaults so follow-up commands stay short.
+description: Install and drive the deliberaide-cli to operate the deliberAIde platform from Claude or Codex. Use whenever the user mentions deliberAIde, wants to work with deliberation discussions, projects, events, sessions, artifacts, or transcript analysis, or asks to "install the deliberAIde CLI". Handles authentication via browser OAuth, lists organisations / projects / discussions, fetches transcripts and analysed artifacts, and manages stateful context defaults so follow-up commands stay short.
 ---
 
 # deliberAIde CLI
 
-deliberAIde is a platform for structured deliberative discussions: audio-to-transcript ingestion, AI-assisted analysis, multi-participant argument mapping, copilot-driven synthesis. The deliberAIde CLI (`deliberaide-cli`) is a stateful Python CLI, published on PyPI, that wraps every HTTP endpoint and WebSocket of the deliberAIde v2 API.
+deliberAIde is a platform for structured deliberative discussions: audio-to-transcript ingestion, AI-assisted analysis, multi-participant argument mapping, and copilot-driven synthesis. The deliberAIde CLI (`deliberaide-cli`) is a stateful Python CLI, published on PyPI, that wraps every HTTP endpoint and WebSocket of the deliberAIde v2 API.
 
 ## When to use this skill
 
@@ -15,19 +15,25 @@ deliberAIde is a platform for structured deliberative discussions: audio-to-tran
 
 ## Installation
 
-If `deliberaide-cli` is not on PATH, install it from PyPI:
+First check whether `deliberaide-cli` is already on PATH:
 
 ```bash
-pip install deliberaide-cli
+deliberaide-cli --help
 ```
 
-The package is published by `saaltrecker` (homepage: https://deliberaide.com). Verify with `deliberaide-cli --help` — it should list ~40 command groups including `auth`, `projects`, `discussions`, `artifacts`.
+If it is missing, install it from PyPI:
+
+```bash
+python -m pip install deliberaide-cli
+```
+
+The package is published on PyPI as `deliberaide-cli`. Verify with `deliberaide-cli --help`; it should list command groups including `auth`, `projects`, `discussions`, and `artifacts`.
 
 ## Production base URL
 
-The CLI's default base URL is `https://platform.deliberaide.com` — the production API. You do not need to configure it. For local development, set `DELIBERAIDE_API_URL=http://127.0.0.1:8000` in the shell.
+The CLI's default base URL is `https://platform.deliberaide.com`, the production API. You do not need to configure it for normal use. For local development, set `DELIBERAIDE_API_URL=http://127.0.0.1:8000` in the shell.
 
-## Authentication — USE ONLY `auth login`
+## Authentication
 
 **Only use `deliberaide-cli auth login`**. It is the orchestrator that handles browser approval and token persistence atomically.
 
@@ -35,19 +41,21 @@ The CLI's default base URL is `https://platform.deliberaide.com` — the product
 deliberaide-cli auth login --no-open-browser
 ```
 
-This command BLOCKS until the user approves in a browser. Set the Bash tool timeout to at least 300000ms for this call.
+This command blocks until the user approves in a browser. Set the shell timeout to at least 300000 ms for this call.
 
-Behaviour:
+Expected behavior:
 1. The command prints a verification URL on stdout (e.g. `Open this page if it does not launch automatically: https://platform.deliberaide.com/api/v1/auth/cli/sessions/<uuid>`).
 2. Surface that URL in your reply so the user can click it in their own browser. If the user is already signed into platform.deliberaide.com in that browser, they only need to click "Approve" — no password typed.
 3. The CLI polls the session endpoint. When the user approves, it captures the access/refresh tokens and writes them to the profile's cookie store.
 4. Subsequent commands send the session cookie automatically.
 
-Do NOT call `deliberaide-cli auth logout` — there is a known JSON-parse bug for empty 204 responses (tracked separately). To clear state, delete `~/.config/deliberaide-cli/` or run `deliberaide-cli profile show` to inspect.
+Do not pass user passwords, API keys, or tokens on the command line. Browser OAuth is the supported path.
+
+Avoid `deliberaide-cli auth logout` until the CLI's empty 204 response handling is confirmed fixed. To clear state, inspect or remove the CLI profile directory instead.
 
 ## The stateful "notepad"
 
-The CLI stores a per-profile context: base URL, cookies, and a `defaults` dict keyed by identifiers like `org_id`, `project_id`, `event_id`, `session_id`, `discussion_id`, `artifact_id`, `conversation_id`. When a saved default exists, the CLI supplies it automatically to any command that needs it. This lets follow-up commands stay short:
+The CLI stores a per-profile context: base URL, cookies, and a `defaults` dict keyed by identifiers like `org_id`, `project_id`, `event_id`, `session_id`, `discussion_id`, `artifact_id`, and `conversation_id`. When a saved default exists, the CLI supplies it automatically to any command that needs it. This lets follow-up commands stay short:
 
 ```bash
 # First time — pass the ID explicitly
@@ -107,10 +115,16 @@ The CLI is auto-generated from the API's OpenAPI schema. To list the ~320 availa
 deliberaide-cli routes list
 ```
 
-Filter by group:
+Filter by group on macOS/Linux:
 
 ```bash
 deliberaide-cli routes list | grep '^discussions\.'
+```
+
+Filter by group on Windows PowerShell:
+
+```powershell
+deliberaide-cli routes list | Select-String '^discussions\.'
 ```
 
 Get help on any subcommand:
@@ -126,11 +140,10 @@ If any command returns `Authentication required` or HTTP 401, the session has ex
 
 ## What NOT to do
 
-- Do not call `deliberaide-cli auth logout` (known bug).
 - Do not guess endpoint names — use `deliberaide-cli routes list` or `--help` to discover them.
 - Do not invent organisation, project, or discussion IDs — always fetch them from a list endpoint first.
 - Do not store credentials in environment variables or command-line arguments; the browser OAuth flow is the only supported path.
 
 ## For non-technical audiences
 
-When narrating what's happening: "deliberaide-cli turns the deliberAIde platform into commands Claude can run. It logs in the same way the user signs into the website — one browser click, no API keys. Once logged in, the CLI remembers the user's organisation and current project so commands stay short, and every result comes back as structured JSON ready for Claude to analyse."
+When narrating what's happening: "deliberaide-cli turns the deliberAIde platform into commands the agent can run. It logs in the same way the user signs into the website — one browser click, no API keys. Once logged in, the CLI remembers the user's organisation and current project so commands stay short, and every result comes back as structured JSON ready to analyze."

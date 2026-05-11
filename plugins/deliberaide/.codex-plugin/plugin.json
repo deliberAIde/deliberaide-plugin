@@ -1,0 +1,44 @@
+{
+  "name": "deliberaide",
+  "version": "0.1.0",
+  "description": "Drive the deliberAIde platform from Codex. Wraps the deliberaide-cli Python package so Codex can authenticate via browser OAuth, list organisations, projects, and discussions, fetch transcripts and analysed artifacts, and orchestrate deliberative-democracy workflows end-to-end.",
+  "author": {
+    "name": "deliberAIde",
+    "email": "info@deliberaide.com",
+    "url": "https://deliberaide.com"
+  },
+  "homepage": "https://deliberaide.com",
+  "repository": "https://github.com/deliberAIde/deliberaide-plugin",
+  "license": "Proprietary",
+  "keywords": [
+    "deliberation",
+    "deliberative-democracy",
+    "civic-tech",
+    "discussions",
+    "transcript-analysis",
+    "cli"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "deliberAIde",
+    "shortDescription": "Operate deliberAIde projects, discussions, transcripts, and analysis from Codex.",
+    "longDescription": "Use the PyPI-published deliberaide-cli from Codex to authenticate with deliberAIde through browser OAuth, discover the API route surface, browse organisations, projects, events, sessions, discussions, artifacts, and retrieve transcript analysis, theme extraction, argument maps, and copilot synthesis.",
+    "developerName": "deliberAIde",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://deliberaide.com",
+    "privacyPolicyURL": "https://deliberaide.com",
+    "termsOfServiceURL": "https://deliberaide.com",
+    "defaultPrompt": [
+      "Log in to deliberAIde.",
+      "List my deliberAIde projects.",
+      "Summarize a deliberAIde discussion."
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}

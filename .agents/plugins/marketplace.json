@@ -1,0 +1,20 @@
+{
+  "name": "deliberaide",
+  "interface": {
+    "displayName": "deliberAIde"
+  },
+  "plugins": [
+    {
+      "name": "deliberaide",
+      "source": {
+        "source": "local",
+        "path": "./plugins/deliberaide"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
